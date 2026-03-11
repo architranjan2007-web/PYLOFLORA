@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pyloflora — Sea Buckthorn Superfruit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber: #E8700A;
+    --amber-light: #F5A623;
+    --amber-pale: #FDE8C8;
+    --deep: #1A0F00;
+    --forest: #2D4A1E;
+    --cream: #FBF5EC;
+    --gold: #C9952A;
+    --rust: #B84A1A;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--deep);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--amber);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: multiply;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--amber);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+    mix-blend-mode: multiply;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(251,245,236,0.85);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(232,112,10,0.12);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--deep);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--amber); }
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 2px;
+    cursor: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--rust); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 7rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 75% 50%, rgba(245,166,35,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 50% at 20% 80%, rgba(45,74,30,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.4;
+  }
+  .hero-left { position: relative; z-index: 2; }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.8rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 2.5rem; height: 1px;
+    background: var(--amber);
+    display: block;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--deep);
+    margin-bottom: 0.2rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--amber);
+    display: block;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--deep);
+    opacity: 0.75;
+    max-width: 34ch;
+    margin: 1.8rem 0 2.5rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; align-items: center;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--deep);
+    color: var(--cream);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 2px;
+    cursor: none;
+    transition: background 0.25s, transform 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--amber); transform: translateY(-2px); }
+  .btn-secondary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--deep);
+    border: 1px solid rgba(26,15,0,0.25);
+    padding: 1rem 2rem;
+    border-radius: 2px;
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+  .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeIn 1.2s 0.2s ease both;
+  }
+  .hero-visual {
+    width: 380px; height: 380px;
+    position: relative;
+  }
+  .berry-circle {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle at 38% 36%, #f7c97a 0%, #E8700A 45%, #b84a1a 80%, #7a2c0a 100%);
+    border-radius: 50%;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 30px 80px rgba(232,112,10,0.35), 0 0 0 1.5rem rgba(232,112,10,0.07), inset 0 -20px 50px rgba(0,0,0,0.15);
+    animation: float 5s ease-in-out infinite;
+  }
+  .berry-label {
+    position: absolute; bottom: -1rem; right: -1rem;
+    background: var(--forest);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+  }
+  .orbit-tag {
+    position: absolute;
+    background: var(--cream);
+    border: 1px solid rgba(232,112,10,0.2);
+    border-radius: 2px;
+    padding: 0.5rem 0.85rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    color: var(--deep);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .orbit-tag:nth-child(2) { top: 5%; right: 5%; animation: float 4s 0.5s ease-in-out infinite; }
+  .orbit-tag:nth-child(3) { top: 40%; right: -10%; animation: float 4.5s 1s ease-in-out infinite; }
+  .orbit-tag:nth-child(4) { bottom: 10%; right: 8%; animation: float 5s 1.5s ease-in-out infinite; }
+  .orbit-tag:nth-child(5) { top: 10%; left: 2%; animation: float 4s 0.8s ease-in-out infinite; }
+  .orbit-tag:nth-child(6) { bottom: 25%; left: -5%; animation: float 4.8s 0.3s ease-in-out infinite; }
+
+  .stats-row {
+    display: flex; gap: 3rem;
+    padding: 2rem 3rem;
+    border-top: 1px solid rgba(26,15,0,0.08);
+    border-bottom: 1px solid rgba(26,15,0,0.08);
+    animation: fadeUp 1s 0.5s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 0.3rem;
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-tag::before { content: ''; width: 1.5rem; height: 1px; background: var(--amber); }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+  .section-title em { font-style: italic; color: var(--amber); }
+
+  /* ABOUT SECTION */
+  .about { background: var(--deep); color: var(--cream); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .about .section-title { color: var(--cream); }
+  .about p {
+    font-size: 1.1rem;
+    line-height: 1.85;
+    opacity: 0.8;
+    margin-bottom: 1.2rem;
+  }
+  .about-visual {
+    position: relative;
+    height: 420px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2D4A1E 0%, #1a3010 50%, #0d1f09 100%);
+  }
+  .about-visual-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.5rem;
+  }
+  .botanical-icon {
+    width: 160px; height: 160px;
+    position: relative;
+  }
+  .leaf-circle {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, #f7c97a, #E8700A);
+    border-radius: 50% 0 50% 0;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(var(--r));
+    opacity: 0.85;
+  }
+  .about-caption {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    color: var(--cream);
+  }
+  .origin-badge {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 2px;
+    padding: 1rem 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--amber-light);
+    margin-top: 2rem;
+    display: inline-block;
+  }
+
+  /* BENEFITS */
+  .benefits { background: var(--cream); }
+  .benefits-intro {
+    max-width: 55ch;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    opacity: 0.75;
+    margin-bottom: 4rem;
+  }
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(26,15,0,0.1);
+    border: 1.5px solid rgba(26,15,0,0.1);
+  }
+  .benefit-card {
+    background: var(--cream);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .benefit-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--amber);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .benefit-card:hover { background: #fff7ee; }
+  .benefit-card:hover::before { transform: scaleX(1); }
+  .benefit-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: rgba(232,112,10,0.15);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+    transition: color 0.3s;
+  }
+  .benefit-card:hover .benefit-number { color: rgba(232,112,10,0.3); }
+  .benefit-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .benefit-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.7rem;
+    color: var(--deep);
+  }
+  .benefit-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    opacity: 0.7;
+  }
+
+  /* NUTRIENTS */
+  .nutrients { background: #fff7ee; }
+  .nutrients-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: start;
+    margin-bottom: 4rem;
+  }
+  .nutrients p { font-size: 1.1rem; line-height: 1.8; opacity: 0.75; }
+  .nutrient-bars { display: flex; flex-direction: column; gap: 1.2rem; }
+  .nutrient-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+  .nutrient-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .nutrient-bar-bg {
+    height: 5px;
+    background: rgba(26,15,0,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .nutrient-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber-light), var(--amber));
+    border-radius: 10px;
+    transform-origin: left;
+    animation: barGrow 1.5s ease both;
+    animation-play-state: paused;
+  }
+  .nutrient-bar-fill.animated { animation-play-state: running; }
+  .nutrient-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--amber);
+    white-space: nowrap;
+  }
+
+  /* SCIENCE FACTS */
+  .science-scroll {
+    overflow-x: auto;
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    scrollbar-width: none;
+  }
+  .science-scroll::-webkit-scrollbar { display: none; }
+  .fact-card {
+    flex-shrink: 0;
+    width: 300px;
+    background: var(--deep);
+    color: var(--cream);
+    padding: 2rem;
+    border-radius: 4px;
+  }
+  .fact-card em {
+    font-style: italic;
+    color: var(--amber-light);
+    font-size: 1.3rem;
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .fact-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  /* PRODUCT SECTION */
+  .product-section { background: var(--forest); color: var(--cream); }
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .product-visual {
+    height: 480px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .bottle-shape {
+    width: 100px; height: 220px;
+    background: linear-gradient(180deg, rgba(245,166,35,0.9) 0%, rgba(184,74,26,0.95) 60%, rgba(45,74,30,0.9) 100%);
+    border-radius: 12px 12px 8px 8px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4), inset 2px 0 8px rgba(255,255,255,0.15);
+    animation: float 4s ease-in-out infinite;
+  }
+  .bottle-shape::before {
+    content: '';
+    width: 44px; height: 30px;
+    background: rgba(245,166,35,0.95);
+    border-radius: 4px 4px 0 0;
+    position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+  }
+  .bottle-shape::after {
+    content: 'PYLOFLORA';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+  .product-glows {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at 50% 55%, rgba(232,112,10,0.2) 0%, transparent 65%);
+  }
+  .product-info .section-title { color: var(--cream); }
+  .product-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .feature-row {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .feature-dot {
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+  .feature-text { font-size: 1rem; line-height: 1.65; opacity: 0.8; }
+  .feature-text strong { color: var(--amber-light); font-weight: 600; }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--cream); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .testi-card {
+    background: #fff;
+    border: 1px solid rgba(26,15,0,0.07);
+    border-radius: 4px;
+    padding: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(232,112,10,0.1); }
+  .stars { color: var(--amber); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .testi-text { font-size: 1rem; line-height: 1.75; opacity: 0.8; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* HOW TO USE */
+  .how-to { background: var(--amber-pale); }
+  .steps-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+  .step {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    position: relative;
+  }
+  .step::after {
+    content: '→';
+    position: absolute; right: -1rem; top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--amber);
+    opacity: 0.4;
+  }
+  .step:last-child::after { display: none; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--amber);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .step-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .step-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .step-desc { font-size: 0.9rem; line-height: 1.6; opacity: 0.7; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--deep);
+    color: var(--cream);
+    text-align: center;
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(232,112,10,0.15) 0%, transparent 70%);
+  }
+  .cta-section .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--cream); }
+  .cta-section .section-tag { justify-content: center; }
+  .cta-section .section-tag::before { display: none; }
+  .cta-sub { font-size: 1.15rem; opacity: 0.65; margin: 1.5rem auto 3rem; max-width: 45ch; line-height: 1.75; }
+  .cta-buttons { display: flex; gap: 1rem; justify-content: center; }
+  .btn-cta-main {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    padding: 1.1rem 3rem;
+    border-radius: 2px;
+    cursor: none;
+    transition: background 0.25s, transform 0.2s;
+    text-decoration: none;
+  }
+  .btn-cta-main:hover { background: var(--amber-light); transform: translateY(-2px); }
+  .guarantee {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-top: 2rem;
+    display: flex; align-items: center; gap: 0.5rem; justify-content: center;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #0e0800;
+    color: rgba(251,245,236,0.5);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer .nav-logo { color: rgba(232,112,10,0.7); }
+  .footer-text { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-12px); }
+  }
+  @keyframes barGrow {
+    from { width: 0; } to { width: 100%; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Pyloflora</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#nutrients">Nutrients</a></li>
+    <li><a href="#product">Product</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Order Now</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Nature's Most Potent Superfruit</div>
+    <h1 class="hero-title">
+      Pure Sea<br>
+      <em>Buckthorn</em>
+    </h1>
+    <p class="hero-subtitle">Pyloflora harnesses the ancient power of <em>Hippophae rhamnoides</em> — a berry with 12× more Vitamin C than oranges, used for millennia across the Himalayas and Siberia.</p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">Shop Pyloflora</a>
+      <a href="#benefits" class="btn-secondary">Explore Benefits</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="berry-circle"></div>
+      <div class="orbit-tag">🍊 12× Vitamin C</div>
+      <div class="orbit-tag">🛡️ Omega 7 Rich</div>
+      <div class="orbit-tag">🌿 190+ Nutrients</div>
+      <div class="orbit-tag">💛 100% Natural</div>
+      <div class="orbit-tag">🔬 Science-Backed</div>
+      <div class="berry-label">Sea Buckthorn</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat"><div class="stat-number">190+</div><div class="stat-label">Bioactive Nutrients</div></div>
+  <div class="stat"><div class="stat-number">12×</div><div class="stat-label">More Vit C Than Oranges</div></div>
+  <div class="stat"><div class="stat-number">2000+</div><div class="stat-label">Years of Traditional Use</div></div>
+  <div class="stat"><div class="stat-number">60+</div><div class="stat-label">Antioxidants</div></div>
+  <div class="stat"><div class="stat-number">4</div><div class="stat-label">Omega Fatty Acids</div></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid reveal">
+    <div class="about-content">
+      <div class="section-tag">The Plant</div>
+      <h2 class="section-title">A Berry <em>Born</em><br>in Extreme Conditions</h2>
+      <p>Sea Buckthorn (<em>Hippophae rhamnoides</em>) thrives in the harshest environments on Earth — from the Tibetan Plateau at 5,200m to the freezing steppes of Siberia. This extreme resilience creates an extraordinary concentration of protective compounds within each tiny berry.</p>
+      <p>Used in traditional Tibetan, Chinese, and Ayurvedic medicine for over 2,000 years, sea buckthorn was recorded in the 8th-century Tang Dynasty and carried by Genghis Khan's armies. Himalayan cultures called it "Holy Fruit of the Himalayas."</p>
+      <p>Pyloflora brings this ancient wisdom together with modern extraction science — delivering the complete nutritional profile of the whole berry, nothing added, nothing lost.</p>
+      <div class="origin-badge">🌏 Sourced from Himalayan Highlands · Cold-Pressed · Non-GMO</div>
+    </div>
+    <div class="about-visual">
+      <div class="about-visual-inner">
+        <div class="botanical-icon">
+          <div class="leaf-circle" style="--r: 0deg; width:100px; height:40px; top:40%; border-radius: 50% 0 50% 0;"></div>
+          <div class="leaf-circle" style="--r: 60deg; width:100px; height:40px; top:40%; border-radius: 50% 0 50% 0;"></div>
+          <div class="leaf-circle" style="--r: 120deg; width:100px; height:40px; top:40%; border-radius: 50% 0 50% 0;"></div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#f7c97a; font-style:italic;">Hippophae rhamnoides</div>
+          <div class="about-caption" style="margin-top:0.5rem;">Botanical Classification</div>
+        </div>
+        <div style="display:flex; gap:1.5rem; margin-top:1rem;">
+          <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#E8700A;">Class</div><div class="about-caption">Magnoliopsida</div></div>
+          <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#E8700A;">Family</div><div class="about-caption">Elaeagnaceae</div></div>
+          <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#E8700A;">Origin</div><div class="about-caption">Himalayan</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits" id="benefits">
+  <div class="reveal">
+    <div class="section-tag">Why Pyloflora</div>
+    <h2 class="section-title">12 Remarkable <em>Health Benefits</em></h2>
+    <p class="benefits-intro">Sea Buckthorn is one of the most nutritionally complete plants on Earth. Each Pyloflora serving delivers measurable, science-backed benefits across every major body system.</p>
+  </div>
+  <div class="benefits-grid reveal">
+    <div class="benefit-card">
+      <div class="benefit-number">01</div>
+      <div class="benefit-icon">🛡️</div>
+      <div class="benefit-name">Immune Fortification</div>
+      <div class="benefit-desc">With 200–800mg of Vitamin C per 100g — 12× higher than oranges — Pyloflora powerfully activates white blood cells, boosts interferon production, and reduces illness duration significantly.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">02</div>
+      <div class="benefit-icon">✨</div>
+      <div class="benefit-name">Skin Regeneration</div>
+      <div class="benefit-desc">Omega-7 (palmitoleic acid) and Vitamins A, C, and E work synergistically to accelerate skin cell renewal, reduce wrinkles, hydrate from within, and heal wounds and burns.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">03</div>
+      <div class="benefit-icon">❤️</div>
+      <div class="benefit-name">Cardiovascular Health</div>
+      <div class="benefit-desc">Omega-3, 6, 7, and 9 fatty acids lower LDL cholesterol, reduce arterial inflammation, improve blood pressure, and protect endothelial lining — a complete heart care complex.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">04</div>
+      <div class="benefit-icon">🔥</div>
+      <div class="benefit-name">Antioxidant Power</div>
+      <div class="benefit-desc">Over 60 antioxidants including carotenoids, flavonoids, and tocopherols neutralize free radicals, slow cellular aging, and protect against oxidative damage at the DNA level.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">05</div>
+      <div class="benefit-icon">🌀</div>
+      <div class="benefit-name">Digestive Healing</div>
+      <div class="benefit-desc">Sea buckthorn oil coats and heals the gastrointestinal lining, reduces ulcers, soothes IBS symptoms, supports healthy gut flora, and improves nutrient absorption.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">06</div>
+      <div class="benefit-icon">🧠</div>
+      <div class="benefit-name">Cognitive Support</div>
+      <div class="benefit-desc">Essential fatty acids and flavonoids cross the blood-brain barrier, protecting neurons, enhancing memory, reducing neuroinflammation, and supporting mental clarity.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">07</div>
+      <div class="benefit-icon">⚡</div>
+      <div class="benefit-name">Energy & Vitality</div>
+      <div class="benefit-desc">Iron, B-complex vitamins, and magnesium boost cellular energy production, reduce fatigue, improve oxygen transport, and support mitochondrial function at the cellular level.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">08</div>
+      <div class="benefit-icon">🦴</div>
+      <div class="benefit-name">Bone Density</div>
+      <div class="benefit-desc">Calcium, phosphorus, magnesium, and Vitamin K2 work together to strengthen bone matrix, improve density, and reduce osteoporosis risk in aging populations.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">09</div>
+      <div class="benefit-icon">👁️</div>
+      <div class="benefit-name">Vision Protection</div>
+      <div class="benefit-desc">High beta-carotene and zeaxanthin concentrations protect macular cells, reduce cataract risk, combat digital eye strain, and maintain night vision acuity.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">10</div>
+      <div class="benefit-icon">💧</div>
+      <div class="benefit-name">Liver Detoxification</div>
+      <div class="benefit-desc">Unique phytocompounds support phase I and II detoxification pathways, reduce liver enzyme levels, protect hepatocytes, and assist recovery from metabolic damage.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">11</div>
+      <div class="benefit-icon">⚖️</div>
+      <div class="benefit-name">Metabolic Balance</div>
+      <div class="benefit-desc">Regulates blood glucose levels, improves insulin sensitivity, supports healthy weight management, and reduces visceral fat through its omega-7 and fiber content.</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-number">12</div>
+      <div class="benefit-icon">🌸</div>
+      <div class="benefit-name">Hormonal Harmony</div>
+      <div class="benefit-desc">Phytoestrogens and adaptogenic compounds support hormonal balance, relieve menopausal symptoms, improve mood stability, and reduce cortisol in stress responses.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NUTRIENTS -->
+<section class="nutrients" id="nutrients">
+  <div class="nutrients-header reveal">
+    <div>
+      <div class="section-tag">Nutritional Profile</div>
+      <h2 class="section-title">190+ <em>Nutrients</em><br>in One Berry</h2>
+    </div>
+    <p>Sea Buckthorn is one of the only plants to contain all four omega fatty acids naturally. It's also one of the richest plant sources of Vitamin C, E, and carotenoids in the world. Every Pyloflora capsule delivers the full-spectrum berry.</p>
+  </div>
+  <div class="nutrient-bars reveal">
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Vitamin C</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:95%"></div></div></div>
+      <div class="nutrient-value">800mg/100g</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Carotenoids (Vit A)</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:88%"></div></div></div>
+      <div class="nutrient-value">54mg/100g</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Vitamin E (Tocopherols)</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:80%"></div></div></div>
+      <div class="nutrient-value">160mg/100g</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Omega-7 (Palmitoleic Acid)</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:75%"></div></div></div>
+      <div class="nutrient-value">34% of oil</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Flavonoids</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:70%"></div></div></div>
+      <div class="nutrient-value">890mg/100g</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Iron</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:60%"></div></div></div>
+      <div class="nutrient-value">1.7mg/100g</div>
+    </div>
+    <div class="nutrient-row">
+      <div><div class="nutrient-name">Potassium</div><div class="nutrient-bar-bg"><div class="nutrient-bar-fill" style="width:55%"></div></div></div>
+      <div class="nutrient-value">232mg/100g</div>
+    </div>
+  </div>
+
+  <!-- Fact Cards -->
+  <div class="section-tag reveal" style="margin-top:4rem; margin-bottom:1rem;">Science Notes</div>
+  <div class="science-scroll reveal">
+    <div class="fact-card"><em>"Only plant known to naturally contain all 4 omega fatty acids: 3, 6, 7, and 9."</em><div class="fact-source">Journal of Ethnopharmacology</div></div>
+    <div class="fact-card"><em>"Beta-carotene content up to 42mg per 100g — among the highest of any plant."</em><div class="fact-source">Food Chemistry Research</div></div>
+    <div class="fact-card"><em>"Sea buckthorn oil shows measurable healing effects on gastric ulcers in clinical trials."</em><div class="fact-source">Phytotherapy Research</div></div>
+    <div class="fact-card"><em>"Flavonoids isorhamnetin and quercetin exhibit strong anti-inflammatory and anticancer activity in vitro."</em><div class="fact-source">International Journal of Oncology</div></div>
+    <div class="fact-card"><em>"Used by Chinese Olympic athletes in 1988 Seoul Games to enhance performance and recovery."</em><div class="fact-source">Sports Medicine Reports</div></div>
+    <div class="fact-card"><em>"Antioxidant capacity measured at 14x higher than blueberries using ORAC scale."</em><div class="fact-source">Antioxidants & Redox Signaling</div></div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="product-section" id="product">
+  <div class="product-grid reveal">
+    <div class="product-visual">
+      <div class="product-glows"></div>
+      <div class="bottle-shape"></div>
+    </div>
+    <div class="product-info">
+      <div class="section-tag" style="color:#f5a623;">The Formula</div>
+      <h2 class="section-title">Pyloflora<br><em>Sea Buckthorn</em></h2>
+      <p style="font-size:1.05rem; line-height:1.8; opacity:0.75; margin-top:1rem;">The world's most complete sea buckthorn supplement — cold-pressed whole-berry extract delivering 190+ bioactive nutrients in their natural ratios.</p>
+      <div class="product-features">
+        <div class="feature-row"><div class="feature-dot"></div><div class="feature-text"><strong>Cold-Pressed Extraction</strong> — Zero heat processing preserves all heat-sensitive Vitamins C and E, enzymes, and phytonutrients intact.</div></div>
+        <div class="feature-row"><div class="feature-dot"></div><div class="feature-text"><strong>Full-Spectrum Berry</strong> — Fruit, pulp, seed and skin all included — no isolated extracts. Nature knows best.</div></div>
+        <div class="feature-row"><div class="feature-dot"></div><div class="feature-text"><strong>Standardized Potency</strong> — Every batch tested to guarantee minimum 200mg Vitamin C and 30% omega-7 content.</div></div>
+        <div class="feature-row"><div class="feature-dot"></div><div class="feature-text"><strong>Himalayan Origin</strong> — Wild-harvested at altitude from pristine high-elevation groves, free from pesticides and pollution.</div></div>
+        <div class="feature-row"><div class="feature-dot"></div><div class="feature-text"><strong>Bioavailability Enhanced</strong> — Lipid-soluble nutrients delivered in natural berry oil matrix for maximum absorption.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="how-to" id="usage">
+  <div class="reveal">
+    <div class="section-tag">Usage Guide</div>
+    <h2 class="section-title">Simple Daily <em>Ritual</em></h2>
+  </div>
+  <div class="steps-row reveal">
+    <div class="step"><div class="step-num">01</div><div class="step-icon">🌅</div><div class="step-title">Morning Dose</div><div class="step-desc">Take 1–2 capsules with your morning meal for optimal nutrient absorption with dietary fats.</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-icon">💧</div><div class="step-title">Stay Hydrated</div><div class="step-desc">Drink a full glass of water with each dose to support circulation and nutrient transport.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-icon">🔁</div><div class="step-title">Be Consistent</div><div class="step-desc">Best results appear after 4–6 weeks of daily use as bioactive compounds accumulate in tissues.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-icon">📈</div><div class="step-title">Notice Results</div><div class="step-desc">Track skin, energy, and immunity improvements. Most users report visible changes within 30 days.</div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <div class="reveal">
+    <div class="section-tag">Customer Stories</div>
+    <h2 class="section-title">Real Results, <em>Real People</em></h2>
+  </div>
+  <div class="testimonials-grid reveal">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"My skin completely transformed within 6 weeks. The dryness I had for years is gone and my complexion has a natural glow I haven't had since my 20s."</div>
+      <div class="testi-author">— Priya M., Delhi · Verified Purchase</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"I started taking Pyloflora for my gut issues. Within a month my digestion is dramatically better and I have so much more energy throughout the day."</div>
+      <div class="testi-author">— Arjun K., Mumbai · Verified Purchase</div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"As a runner I was always getting sick during training. Since Pyloflora I haven't had a single illness in 4 months — my recovery is also noticeably faster."</div>
+      <div class="testi-author">— Ritu S., Bangalore · Verified Purchase</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-bg"></div>
+  <div style="position:relative; z-index:2;">
+    <div class="section-tag" style="color:var(--amber);">Limited Stock Available</div>
+    <h2 class="section-title">Begin Your <em>Transformation</em></h2>
+    <p class="cta-sub">Join thousands who have discovered the extraordinary healing power of Pyloflora Sea Buckthorn. Your health journey starts today.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn-cta-main">Order Pyloflora Now</a>
+    </div>
+    <div class="guarantee">🛡️ &nbsp; 30-Day Money-Back Guarantee &nbsp;·&nbsp; Free Shipping &nbsp;·&nbsp; Lab-Tested</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="nav-logo">Pyloflora</div>
+  <div class="footer-text">© 2026 Pyloflora · Sea Buckthorn Superfruit · All Rights Reserved</div>
+  <div class="footer-text" style="font-size:0.55rem; max-width: 300px; text-align:right; opacity:0.35;">These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx+'px';
+    ring.style.top = ry+'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='50px'; ring.style.height='50px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Nutrient bar animations
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.nutrient-bar-fill').forEach((bar, i) => {
+          setTimeout(() => bar.classList.add('animated'), i * 150);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.nutrient-bars').forEach(el => barObs.observe(el));
+</script>
+</body>
+</html>
